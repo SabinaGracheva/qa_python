@@ -1,5 +1,6 @@
 # qa_python
 
+
 ###### The file "tests.py"  contains tests to check the functionality from the file "main.py".
 ##### Command to run tests in terminal
 ###### pytest -v tests.py
