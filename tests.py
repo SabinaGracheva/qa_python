@@ -36,7 +36,7 @@ class TestBooksCollector:
     def test_add_new_book_three_books_successfully(self, book_name):
         collector = BooksCollector()
         collector.add_new_book(book_name)
-        assert 0 < len(collector.books_genre.values()) <= 40, \
+        assert book_name in collector.get_books_genre(), \
             'Книга не добавлена в словарь books_genre'
 
     @pytest.mark.parametrize(
@@ -49,7 +49,7 @@ class TestBooksCollector:
     def test_add_new_book_name_book_0_and_41_characters(self, book_name):
         collector = BooksCollector()
         collector.add_new_book(book_name)
-        assert len(collector.books_genre.values()) == 0, \
+        assert book_name not in collector.get_books_genre(), \
             'Книга не должна быть добавлена. Название книги отсутствует или превышает 40 символов'
 
     @pytest.mark.parametrize(
@@ -69,16 +69,15 @@ class TestBooksCollector:
 
     def test_set_book_genre_for_not_added_books(self):
         collector = BooksCollector()
-        collector.add_new_book('Алые паруса')
         collector.set_book_genre('Алладин', 'Мультфильмы')
-        assert 'Алладин' not in collector.books_genre, \
+        assert collector.get_book_genre('Алладин') != 'Мультфильмы', \
             'Установлен жанр для не существующей книги'
 
     def test_set_book_genre_no_genre_listed(self):
         collector = BooksCollector()
         collector.add_new_book('Дракула')
         collector.set_book_genre('Дракула', 'Триллеры')
-        assert 'Триллеры' not in collector.books_genre.values(), \
+        assert 'Триллеры' not in collector.get_books_genre(), \
             'Установлен не существующий жанр'
 
     def test_get_book_genre_by_name(self):
@@ -139,14 +138,12 @@ class TestBooksCollector:
 
     def test_add_book_in_favorites_successfully(self):
         collector = BooksCollector()
-        collector.add_new_book('Пигмалион')
         collector.add_new_book('Алладин')
         collector.add_book_in_favorites('Алладин')
         assert collector.get_list_of_favorites_books() == ['Алладин']
 
     def test_add_book_in_favorites_book_not_add(self):
         collector = BooksCollector()
-        collector.add_new_book('Пигмалион')
         collector.add_book_in_favorites('Дракула')
         assert collector.get_list_of_favorites_books() != ['Дракула'], \
             'Книга не может быть добавлена в "Избранное", так как она отсутствует в добавленных книгах'
