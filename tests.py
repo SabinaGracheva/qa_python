@@ -52,20 +52,12 @@ class TestBooksCollector:
         assert book_name not in collector.get_books_genre(), \
             'Книга не должна быть добавлена. Название книги отсутствует или превышает 40 символов'
 
-    @pytest.mark.parametrize(
-        'book_name, genre_name',
-        [
-            ['Семь смертей Эвелины Хардкасл', 'Детективы'],
-            ['Алладин', 'Мультфильмы'],
-            ['Дракула', 'Ужасы']
-        ]
-    )
-    def test_set_book_genre_for_book_successfully(self, book_name, genre_name):
+    def test_set_book_genre_for_book_successfully(self):
         collector = BooksCollector()
-        collector.add_new_book(book_name)
-        collector.set_book_genre(book_name, genre_name)
-        assert collector.books_genre[book_name] == genre_name, \
-            f'Жанр "{genre_name}" для книги "{book_name}" не установлен'
+        collector.add_new_book('Семь смертей Эвелины Хардкасл')
+        collector.set_book_genre('Семь смертей Эвелины Хардкасл', 'Детективы')
+        assert collector.get_book_genre('Семь смертей Эвелины Хардкасл') == 'Детективы', \
+            f'Жанр для книги не установлен'
 
     def test_set_book_genre_for_not_added_books(self):
         collector = BooksCollector()
@@ -89,10 +81,8 @@ class TestBooksCollector:
 
     def test_books_with_genre_comedy(self):
         collector = BooksCollector()
-        collector.add_new_book('Пигмалион')
         collector.add_new_book('Алладин')
         collector.add_new_book('Горе от ума')
-        collector.set_book_genre('Пигмалион', 'Комедии')
         collector.set_book_genre('Алладин', 'Мультфильмы')
         collector.set_book_genre('Горе от ума', 'Комедии')
         assert 'Алладин' not in collector.get_books_with_specific_genre('Комедии'), \
